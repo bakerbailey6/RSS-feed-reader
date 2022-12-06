@@ -3,13 +3,15 @@ import datetime
 import dateutil.parser as parser
 
 class Feed:
-
+    
+    # constructor retrieves and parses data from given url
     def __init__(self, url): 
         try: 
             self.data = feedparser.parse(url)
         except:
             print("Error. Could not parse URL")
 
+    # Exception returns title from parsed feed data
     def getTitle(self):
         try:
             title = self.data.feed.title
@@ -18,6 +20,7 @@ class Feed:
         finally:
             return title
 
+    # Exception returns link from parsed feed data
     def getLink(self):
         try:
             link = self.data.feed.link
@@ -26,6 +29,7 @@ class Feed:
         finally: 
             return link
 
+    # Exception returns description from parsed feed data
     def getDescription(self):
         try:
             description = self.data.feed.description
@@ -34,27 +38,19 @@ class Feed:
         finally:
             return description
     
-    def getInfo(self):
-        try:
-            description = self.data.feed.info
-        except:
-            description = "No descripton available"
-        finally:
-            return description
-    
-
+    # Exception returns publish date from parsed feed data
     def getPublished(self):
         try:
-            published = parser.parse(self.data.feed.published).strftime("%A %d-%m-%Y %H:%M")
+            published = parser.parse(self.data.feed.published).strftime("%d-%m-%Y")
         except:
             published = "No publish date available"
         finally:
             return published
 
+    # Exception returns title, link, summary, and publish date into Entry class
     def getEntry(self, i):
         try:
             entry = self.data.entries[i]
-
             try: 
                 title = entry.title
             except:
@@ -64,22 +60,23 @@ class Feed:
             except:
                 link = "No entry link available"
             try: 
-                summary = entry.summary
+                description = entry.description
             except:
-                summary = "No entry summary available"
+                description = "No entry summary available"
             try: 
                 published = entry.published
             except:
                 published = "No entry publish date available"
             
-            entry = Entry(title, link, summary, published)
+            entry = Entry(title, link, description, published)
             
         except:
-            entry = Entry("No entry title available", "No entry link available", "No entry summary available", "No entry publish date available")
+            entry = Entry("No entry title available", "No entry link available", "No entry description available", "No entry publish date available")
 
         finally:
             return entry
 
+    # Exception returns length of feed entries list
     def getLength(self):
         try:
             length = len(self.data.entries)
@@ -88,7 +85,7 @@ class Feed:
         finally:
             return length
 
-        
+    # Returns all the feeds entries as a list   
     def getEntries(self):
         entries = []
 
@@ -97,13 +94,12 @@ class Feed:
         
         return entries
 
-        
+    # Exception returns feed image    
     def getImage(self):
         try:
             image = self.data.feed.image
         except:
             image = "No image available"
-        print(image)
         return image
 
 class Entry:
@@ -113,18 +109,22 @@ class Entry:
         self.link = link
         self.description = description
         self.published = published
-
+    
+    # Method returns entry title
     def getTitle(self):
         return self.title
 
+    # Method returns entry link
     def getLink(self):
         return self.link
 
+    # Method returns entry description
     def getDescription(self):
         return self.description
     
+    # Method parses and returns entry publish date
     def getPublished(self):
-        return parser.parse(self.published).strftime("%A %d-%m-%Y %H:%M")
+        return parser.parse(self.published).strftime("%d-%m-%Y")
 
 
     

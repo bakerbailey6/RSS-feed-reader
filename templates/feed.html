@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block feed %}
+    <div class=>
+
+            {% if results %}
+                {% if image %}
+                    <a href="{{ image['link']}} "><img src="{{ image['href'] }}" alt="{{image['title']}}" width="{{ image['width'] }}" height="{{ image['height'] }}"></a>
+                {% endif %}
+                {% if title %}
+                    <h1 class=>{{ title }}</h1>
+                {% endif %}
+                {% for result in results %}
+                    <article class="blog-post">
+                        <h2 class="blog-post-title mb-1"><a href="{{ result['link'] }}" target="_blank">{{ result['title'] }}</a></h2>
+                        <p>{{ result['description'] }}</p>
+                        <p>Published on {{ result['published'] }}</p>
+                        <hr>
+                    </article>
+                {% endfor%}
+            {% else %}
+            <h1>Please enter an url!</h1>
+            {% endif %}
+
+    </div>
+{% endblock feed %}
